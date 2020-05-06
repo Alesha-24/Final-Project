@@ -10,12 +10,12 @@ load_dotenv()
 API_KEY = os.environ.get("NYT_API")
 months = {'01': 31, '02':28, '03':31, '04':30, '05':31, '06':30, '07':31, '08':31, '09':30, '10':31,'11':30, '12':31, 'leap':29 }
 
-def get_articles_1():
+def get_articles_1(topic):
     request_url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?q={topic}&fq=&facet=true&sort=newest&api-key={API_KEY}'
     response = requests.get(request_url)
     return response 
 
-def get_articles_2():
+def get_articles_2(topic, begin_date, end_date):
     request_url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?q={topic}&facet=true&begin_date={begin_date}&end_date={end_date}&api-key={API_KEY}'
     response = requests.get(request_url)
     return response 
@@ -55,28 +55,24 @@ def date_validation(date, months):
                     if int(day) <= days:
                         correct = True 
                     else:
-                        print("Please ensure you enter a valid day")
+                        print("Error! Please ensure you enter a day that exists!")
+                else:
+                    print("Error! PLease ensure you enter a month that exists!")
             else:
-                print("Please ensure the year you have entered is not in the future!")
+                print("Error! Please ensure the year you have entered is not in the future!")
         else:
-            print("Please ensure you enter a date that is eight digits in length!") 
+            print("Error! Please ensure you enter a date that is eight digits in length!") 
     else:
-        print("Please ensure you are inputting only numeric values")
+        print("Error! Please ensure you are inputting only numeric values!")
     return correct 
 
-if __name__ == "__main__":
-
-    print("Welcome to Metanoia. This is a customized news app, where you can get the latest news tailored to your interests and what you care about!")
-    print("---------------------------")
-    print("To get started we need some information from you...")
-    print("---------------------------")
-    name = input("What is your name? ")
-    topic = input(f"Hi {name}! Please input a topic you want to search the New York Times for: ")
+def run_code():
+    topic = input("Please input a topic you want to search the New York Times for: ")
     print("The search results will automatically return the most recent articles that contain your chosen topic within the body of the article.") 
     print("---------------------------")
     print("Please wait, aggregating data...")
 
-    response = get_articles_1()
+    response = get_articles_1(topic)
     hits, all_articles = process_request(response)
 
     while hits == 0:
@@ -84,57 +80,67 @@ if __name__ == "__main__":
         topic = input("PLease input a topic you want to learn more about: ")   
         print("---------------------------")
         print("Please wait, aggregating data...")
-        hits, all_articles = get_articles_1()
+        hits, all_articles = get_articles_1(topic)
 
     #put this in a function 
     for x in all_articles:
-        print(x["headline"]["main"])
-        print(x["pub_date"])
-        print(x["abstract"])
-        print(x["web_url"])
+        print("Article Title: ", x["headline"]["main"])
+        print("Published At: ", x["pub_date"][0:10])
+        print("Abstract: ", x["abstract"])
+        print("URL: ", x["web_url"])
         print("---------------------------")
     
     date_filter = input("You can filter your results by date of publishing. Please enter 'yes' if you would like to filter the results by date, otherwise enter 'no': ")
-    while date_filter == "Yes" or "yes":
+    print(date_filter)
+    while date_filter.lower() == "yes":
         print("Please format your dates in the following format YYYYMMDD, so for example: 24th August 2019 = 20190824")
         print("---------------------------")
         begin_date = input("Please enter a start date: ")
+        correct = date_validation(begin_date,months) 
+        while correct == False:
+            begin_date =input("Please enter a valid begin date: ")
+            correct = date_validation(begin_date, months)
         end_date = input("Please enter an end date: ")
-        if begin_date > end_date:
+        correct = date_validation(end_date,months) 
+        while correct == False:
+            end_date =input("Please enter a valid end date: ")
+            correct = date_validation(end_date, months)
+        if int(begin_date) > int(end_date):
             print("Error! Please ensure that your start date is before the end date you enter.")
             date_filter = "Yes"
         elif begin_date <= end_date:
-            correct = date_validation(begin_date,months) 
-            while correct == False:
-                begin_date =input("Error! Please enter a valid date: ")
-                correct = date_validation(begin_date, months)
-            correct = date_validation(begin_date,months) 
-            while correct == False:
-                end_date =input("Error! Please enter a valid date: ")
-                correct = date_validation(end_date, months)
             print("---------------------------")
             print("Please wait, filtering results...")
-            response = get_articles_2()
+            response = get_articles_2(topic, begin_date, end_date)
             _, all_articles = process_request(response)
             for x in all_articles:
-                print(x["headline"]["main"])
-                print(x["pub_date"])
-                print(x["abstract"])
-                print(x["web_url"])
+                print("Article Title: ", x["headline"]["main"])
+                print("Published At: ", x["pub_date"][0:10])
+                print("Abstract: ", x["abstract"])
+                print("URL: ", x["web_url"])
                 print("---------------------------")
             date_filter = "No"
             break
-
-    if date_filter == "No" or "no":
+    
+    if date_filter.lower() == "no":
         print("We hope you found that interesting!")
-        keep_going = input("Would you like to search the news for another topic that you're interested? Please enter 'yes' or 'no': ")
-        # if keep_going == "yes" or "Yes":
-            
-        # else:
-        #     print("Thank you for using Metanoia!")
+    
+    
+if __name__ == "__main__":
 
-    #to do:
-    #put whole thing in while loop to run again
+    print("Welcome to Metanoia. This is a customized news app, where you can get the latest news tailored to your interests and what you care about!")
+    print("---------------------------")
+    print("To get started we need some information from you...")
+    print("---------------------------")
+    name = input("What is your name? ")
+    print(f"Hi {name}!")
+    
+    run_code()
+    keep_going = input("Would you like to search the news for another topic that you're interested? Please enter 'YES' or 'NO': ")
+    while keep_going.lower() == "yes":
+        run_code()
+        keep_going = input("Would you like to search the news for another topic that you're interested? Please enter 'YES' or 'NO': ")
+    print("Thank you for using Metanoia!")
     
 
 

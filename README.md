@@ -8,7 +8,7 @@ A signifcant problem faced by many consumers today is action paralysis as a resu
 
 Therefore this software, called Metanoia, is designed to give people the information they want at their finger tips. 
 
-There are two ways to use this software; the NYT_news file allows you to search the New York Times (NYT) specfically for information you are interested in, while the all_news file allows you to search a combindation of websites for information and then send this information to you directly in an email.
+There are two ways to use this software; the "NYT_news" file allows you to search the New York Times (NYT) specfically for information you are interested in, while the "all_news" file allows you to search a combination of websites for information and then send this information to you directly in an email.
 
 The set-up for both uses is the same, but the rest of the README.md file will be distinguish the information inputs and outpbuts by these two functionalities. 
 
@@ -62,66 +62,55 @@ In order to ensure that your API keys remain secret and are not invluded in the 
 .env
 ```
 
-### Information Input 
-The system will first prompt you to input a stock symbol (e.g. "TSLA", "MSFT", "C", etc.). It will then prompt you to input your risk tolerance, either LOW, MEDIUM or HIGH, for investing that particular stock in order to generate a tailored reccommendation. The system will allow you to generate a reccomendation for multiple stock tickers at once - however please note that it will produce the reccomendation for each stock before prompting you to enter additional stock tickers. When you are finished entering data please type 'DONE'.
+### New York Times News
+This file allows you to search the NYT for specifc topics and filter oyour search by date. 
+## Information Input 
 
-### Data Validation 
-So as to ensure to provide you with the most accurate information the system also has a built-in two step data validation process which verifies that there is available for the stock ticker entered. 
+The system will first prompt you to enter your name and then a topic that you want to search the New York Times for. For example if you're itnerested in cliamte change oyu can type that in when prompted. It will then ask you if you want to narrow your search results by date, allowing to search for information from a specifc time frame. For example if you searched for cliamte change but wnat to learn more about the infamous and horrifying IPCC report that was release in 2001, you can narrow you search to only articles produced in 2001. The program will ask you to enter a start date and an end date in the format 20200406 (6th April 2020). Please ensure that the start date is before the end date.
 
-### Information Output 
-The program provide ouptut in three forms. 
+The system will allow you to search for multiple topics however please note that it will show the search results for one topic before prompting you to enter and additional one.
 
-First it will print out summary statistics of the stock along with a reccomendation as to whether or not to buy it and justification for that reccomendation. The reccomendation will be based upon two calculations; the frist will compare the latest closing price to the lowest price over the past 100 days, the second will compare the latest closing price to the average closing price over the past 52-weeks. The first calculation will vary depending on the risk level you entered for the stock, such that a greater level of risk averseness will require greater capital gains for the reccomendation to be in favour of buying the stock. 
+## Data Validation 
+So as to ensure to provide you with the most accurate information the system also has built-in data validation processes. The first verifies the topic oyu entered - such that if the get request generates 0 hits it recognizes there is like to have been a typo and prompts you to input a topic again. The second data validation is for the dates entered; the system will check first whether the date entered is all numeric, then it verifies that it is eight digits long, it then checks whether the date entered exists (for example if you enter 31st of April 2020 it will sned a message saying this date doesn't exist)
 
+## Information Output 
+First the program will print out the number of hits your search returned, so you can get an idea of the amount of information that exists for your specfic search. Then it  prints out the 10 most relevant articles for you search. It prints the heading of the article prints, the date it was published, a summary of the article and the url so you can copy it into your browser and read the full article should you so choose.  
+
+## Running the file 
+In order to run this file copy and past the following into the command line. 
 ```sh
--------------------------
-SELECTED TICKER:  AAPL
--------------------------
-REQUESTING STOCK MARKET DATA...
-REQUEST AT:  2020 / 2 / 24    21 : 45
--------------------------
-LATEST DAY:  2020-02-24
-LATEST CLOSE:  $298.18
-52 WEEK AVERAGE CLOSE: $232.64
-100 DAY HIGH:  $327.85
-52 WEEK HIGH: $327.85
-100 DAY LOW:  $215.13
-52 WEEK LOW: $169.50
--------------------------
-RECOMMENDATION: BUY / DON'T BUY
-RECOMMENDATION REASON: (REASON)
+
+python app/NYT_news.py
+
+```
+### All News 
+This file allows you to search tons of different news sites from all over the world. 
+
+## Information Input 
+
+The system will first prompt you to enter your name and email address. It then displays all the available sources you can search and will prompt you to choose upto 20 news sites. It will then ask if you want to further filter your news search by topic, and you can enter any topic you like. 
+
+## Data Validation 
+This file also has system also has built-in data validation processes. The  verifies the sources you choose, such that if the sources entered are not in the given list it prompts you to reenter the source.
+
+## Information Output 
+The program will return two sets of output. First it will return seven top articles from your chosen news sources. You can edit the numbner of articles returned by editting the url. Where it says 'pagesize=7', as shown in the URL below, you can edit this to range to any number between 1-50, depnding on how many articles you chooose
+
+``` sh
+filtered_url = f"https://newsapi.org/v2/everything?sources={url_sources}&qInTitle={topic}&language=en&pagesize=7&apiKey={API_KEY}"
 ```
 
-The second form of output will be a CSV file that has record historical stock data for the past 100 days. Each stock that you choose to analyse will have a unique CSV file that will be named with the stock ticker symbol and stored in the data folder within the project repository.
+Then the program will return the seven most relevant articles to your selected topic from your chosen sources. Again, as above you can edit the number of articles dispalyed by changing the appropriate URL. 
 
-The third form of output will be a line graph that displays the trend in your chosen stock's closing price over the last 100 days. 
+In order to provide users with most relevant information the program first search for the keyword in article titles. However, if no resutls are found it then searches for the keyword in the body and title of an article to optimize the search for the user.
 
-## Project Set Up
-Use GitHub.com to first fork and then download or 'clone' the project repository onto your computer.  It is helpful to choose an easily accessible download location like the Desktop.  
+Finally the program will aggregate all this information and send you an email to your entered address containing the headlines, news sources and URLs for each of the articles the search returned. 
 
 
-After cloning the repository you can then use GitHub Desktop Software to access  the project repository or naivagte their using the command-line below:
-
+## Running the file 
+In order to run this file copy and past the following into the command line. 
 ```sh
- cd ~/Desktop/robo-adivsor/app
-```
 
+python app/all_news.py
 
-## Environment Set Up
-
-Create and activate a new Anaconda virtual environment:
-
-```sh
-conda create -n stocks-env python=3.7 # (first time only)
-conda activate stocks-env
-```
-From within the virtual environment install the required packages specfied in the requirements.txt file in the repository using the code below. 
-```sh
-pip install -r requirements.txt
-```
-
-From within this virtual environment, you can then run the Python script from the command-line:
-
-```sh
-python robo_advisor.py
 ```
