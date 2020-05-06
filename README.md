@@ -4,13 +4,13 @@
 The purposed of this README.md file is to help you install and use this customized news service. 
 
 ## Functionality 
-A signifcant problem faced by many consumers today is action paralysis as a result of either information overload or lack of access to the right information. This often leaves people misinformed and making decisions based on heurestics rather than facts. 
+A significant problem faced by many consumers today is action paralysis as a result of either information overload or lack of access to the right information. This often leaves people misinformed and making decisions based on heuristics rather than facts. 
 
-Therefore this software, called Metanoia, is designed to give people the information they want at their finger tips. 
+Therefore this software, called Metanoia, is designed to give people the information they want at their fingertips. 
 
-There are two ways to use this software; the "NYT_news" file allows you to search the New York Times (NYT) specfically for information you are interested in, while the "all_news" file allows you to search a combination of websites for information and then send this information to you directly in an email.
+There are two ways to use this software; the "NYT_news" file allows you to search the New York Times (NYT) specifically for information you are interested in, while the "all_news" file allows you to search a combination of websites for information and then send this information to you directly in an email.
 
-The set-up for both uses is the same, but the rest of the README.md file will be distinguish the information inputs and outpbuts by these two functionalities. 
+The set-up for both uses is the same, but the rest of the README.md file will be distinguish the information inputs and outputs by these two functionalities. 
 
 ## Setup
 
