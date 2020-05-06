@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 ```
 
-### API Keys
+## API Keys
 In order to successfully gather real time news  the program will need two API Keys, one from the NYT and another News API Key.
 
 You can obtain the NYT key by visitng the link below: 
@@ -54,7 +54,7 @@ NEWS_API = "xyz456"
 
 ```
 
-## Securing your credentials 
+### Securing your credentials 
 
 In order to ensure that your API keys remain secret and are not invluded in the source code or its revision history, please ensure to create a ".gitignore" file in the root directory of oyur repository. Then in the git ignore file place the following code inside:
 
