@@ -72,8 +72,7 @@ if __name__ == "__main__":
     print("---------------------------")
     name = input("What is your name? ")
     topic = input(f"Hi {name}! Please input a topic you want to search the New York Times for: ")
-    print("The search results will automatically return the most recent articles relevant to your chosen topic.") 
-    #mention that it'll come up with articles that list the keywords - or find way to better filter
+    print("The search results will automatically return the most recent articles that contain your chosen topic within the body of the article.") 
     print("---------------------------")
     print("Please wait, aggregating data...")
 
@@ -94,7 +93,6 @@ if __name__ == "__main__":
         print(x["abstract"])
         print(x["web_url"])
     
-    #this should only run if in development mode - in product mode, just return latest news - ie 2020
     date_filter = input("You can filter your results by date of publishing. Please enter 'yes' if you would like to filter the results by date, otherwise enter 'no': ")
     while date_filter == "Yes" or "yes":
         print("Please format your dates in the following format YYYYMMDD, so for example: 24th August 2019 = 20190824")
@@ -124,7 +122,7 @@ if __name__ == "__main__":
                 print(x["web_url"])
             date_filter = "No"
             break
-    #this should only run if its in development mode not production mode 
+
     if date_filter == "No" or "no":
         print("We hope you found that interesting!")
         keep_going = input("Would you like to search the news for another topic that you're interested? Please enter 'yes' or 'no': ")
