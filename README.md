@@ -21,3 +21,8 @@ Then, from within the virtual environment, install package dependencies:
 
 ```sh
 pip install -r requirements.txt
+
+python -m app.my_app
+
+There are two ways to use this program, if you owuld to get new just from the new york times you can 
+simple run the m

@@ -10,6 +10,8 @@ load_dotenv()
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 APP_ENV = os.environ.get("APP_ENV")
 
+from get_news import get_news
+
 
 def email_validation(email_address):
     '''
@@ -46,21 +48,39 @@ def send_email(subject = "Your Daily Briefing from Metanoia", html = "<p>Hello W
 
 if __name__ == "__main__":
     if APP_ENV == "development": #if the app is run on the computer it will ask for user input
-        email_address = input("Please input your email address (eg. hello@gmail.com) : ")
+        print("Welcome to Metanoia. This is a customized news app, where you can get the latest news tailored to your interests and what you care about straight to your inbox!")
+        print("---------------------------")
+        print("To get started we need some information from you...")
+        print("---------------------------")
+        name = input("What is your name? ")
+        email_address = input(f"Hi {name}! Please input your email address (eg. hello@gmail.com) : ")
         is_valid = email_validation(email_address)
         while is_valid == False:
             print("I'm sorry that appears to be an invalid email address, please try again: ")
             email_address = input("Please input your email address again (eg. hello@gmail.com) : ")
             is_valid = email_validation(email_address)
+        source_choices, all_articles,topic, filtered_articles = get_news()
     else:
-        print("HI")
+        print("This app is not configured to run remotely yet")
 
-    subject = "Floof delivery order"
-    html = f"""
-    <h3> Floof delivery order </h3>
-    <h4> 5th May 2020 </h4>
-    <p> One floof delivered to 3700 Ost NW, Washington DC.  </p>
-    <p> Please hurry floof needed ASAP.  </p>
-    """
+    subject = "Your Customized Newsletter from Metanoia"
+    html = ""
+    html += f"<h3>Hi, {name}!</h3>"
+
+    html += "<h4>Today's Date</h4>"
+    html += f"<p>{datetime.today().strftime('%A %B %d %Y, %r')}</p>"
+
+    html += "<h4>Your Chosen News Sources: </h4>"
+    html += f"<p>{source_choices}</p>"
+
+    html += "<h4>The Top Headlines: </h4>"
+    html += f"<p>{all_articles}</p>"
+
+    html += f"<h4>All About {topic.capitalize()}</h4>"
+    html += f"<p>{filtered_articles}</p>"
+
+    html += "</ul>"
+
+    
     send_email(subject, html)
     
