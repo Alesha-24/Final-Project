@@ -3,5 +3,6 @@
 python-dotenv
 requests
 sendgrid==6.0.5
-
+BeautifulSoup4 
 Flask
+py3-validate-email
