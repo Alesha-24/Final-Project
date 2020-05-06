@@ -10,7 +10,7 @@ load_dotenv()
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 APP_ENV = os.environ.get("APP_ENV")
 
-from get_news import get_news
+from all_news import get_news
 
 
 def email_validation(email_address):
@@ -62,6 +62,7 @@ if __name__ == "__main__":
         source_choices, all_articles,topic, filtered_articles = get_news()
     else:
         print("This app is not configured to run remotely yet")
+        #remote configuration coming soon
 
     subject = "Your Customized Newsletter from Metanoia"
     html = ""

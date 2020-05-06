@@ -92,6 +92,7 @@ if __name__ == "__main__":
         print(x["pub_date"])
         print(x["abstract"])
         print(x["web_url"])
+        print("---------------------------")
     
     date_filter = input("You can filter your results by date of publishing. Please enter 'yes' if you would like to filter the results by date, otherwise enter 'no': ")
     while date_filter == "Yes" or "yes":
@@ -120,6 +121,7 @@ if __name__ == "__main__":
                 print(x["pub_date"])
                 print(x["abstract"])
                 print(x["web_url"])
+                print("---------------------------")
             date_filter = "No"
             break
 
