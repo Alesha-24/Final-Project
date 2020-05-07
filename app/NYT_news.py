@@ -2,7 +2,6 @@ import os
 import json 
 import requests
 from dotenv import load_dotenv
-#from pprint import pprint
 from datetime import datetime
 
 load_dotenv()
@@ -89,10 +88,9 @@ def run_code():
     print("The search results will automatically return the most recent articles that contain your chosen topic within the body of the article.") 
     print("---------------------------")
     print("Please wait, aggregating data...")
-
+    
     response = get_articles_1(topic)
     hits, all_articles = process_request(response)
-
     while hits == 0:
         print("I'm sorry, your search returned 0 results, please ensure to enter your topic of interest carefully!")  
         topic = input("PLease input a topic you want to learn more about: ")   
@@ -100,7 +98,6 @@ def run_code():
         print("Please wait, aggregating data...")
         hits, all_articles = get_articles_1(topic)
 
-    #put this in a function 
     for x in all_articles:
         print("Article Title: ", x["headline"]["main"])
         print("Published At: ", x["pub_date"][0:10])
