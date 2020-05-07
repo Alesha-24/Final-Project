@@ -111,7 +111,7 @@ Finally the program will aggregate all this information and send you an email to
 In order to run this file copy and past the following into the command line. 
 ```sh
 
-python app/all_news.py
+python app/email_service.py
 
 ```
 ## Testing
@@ -119,7 +119,7 @@ python app/all_news.py
 The software also has built in testing, which is also run remotely on the Travis CI server when the repository is updated. 
 In order to run the tests on your local computer ensure that you have first activated a virtual environment and installed the "requirements.txt" file as mentioned above because this contains the pytest package. 
 
-Then from the command line simply run the code below:
+Then from the command line simply run the tests using the code below:
 
 ``` sh 
 pytest
