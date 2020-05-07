@@ -32,6 +32,9 @@ def email_validation(email_address):
     return(is_valid) 
 
 def send_email(subject = "Your Daily Briefing from Metanoia", html = "<p>Hello Word </p>"):
+    '''
+    The purpose of this function is to create an email and send it to the email address entered by the user
+    '''
     client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
     print("CLIENT:", type(client))
     print("SUBJECT:", subject)
@@ -45,6 +48,7 @@ def send_email(subject = "Your Daily Briefing from Metanoia", html = "<p>Hello W
     except Exception as e:
         print("OOPS", e.message)
         return None
+
 
 if __name__ == "__main__":
     if APP_ENV == "development": #if the app is run on the computer it will ask for user input
@@ -64,8 +68,23 @@ if __name__ == "__main__":
         print("This app is not configured to run remotely yet")
         #remote configuration coming soon
 
+    def format_articles(all_articles):
+        '''
+        This function formats the list of article dicitonaries in a more user friendly way
+        This new formatting makes the articles easier to read in the email  
+        '''
+        article_strings = []
+
+        for article in all_articles:
+            article_string = f"Article Title: {article['Article Title: ']}, Published At: {article['Published At: ']} \n News Source: {article['News Source: ']}, Article URL: {article['Article URL: ']}"
+            article_strings.append(article_string)
+        return('\n\n'.join(article_strings))
+
     subject = "Your Customized Newsletter from Metanoia"
     html = ""
+
+    html += "<h2>You Customized News, brought to you by Metanoia</h2>"
+
     html += f"<h3>Hi, {name}!</h3>"
 
     html += "<h4>Today's Date</h4>"
@@ -75,10 +94,10 @@ if __name__ == "__main__":
     html += f"<p>{source_choices}</p>"
 
     html += "<h4>The Top Headlines: </h4>"
-    html += f"<p>{all_articles}</p>"
+    html += f"<p>{format_articles(all_articles)}</p>"
 
     html += f"<h4>All About {topic.capitalize()}</h4>"
-    html += f"<p>{filtered_articles}</p>"
+    html += f"<p>{format_articles(filtered_articles)}</p>"
 
     html += "</ul>"
 

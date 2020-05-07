@@ -11,23 +11,41 @@ API_KEY = os.environ.get("NYT_API")
 months = {'01': 31, '02':28, '03':31, '04':30, '05':31, '06':30, '07':31, '08':31, '09':30, '10':31,'11':30, '12':31, 'leap':29 }
 
 def get_articles_1(topic):
+    '''
+    This function retrieves articles from the NYT by issuing a get request
+    '''
     request_url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?q={topic}&fq=&facet=true&sort=newest&api-key={API_KEY}'
     response = requests.get(request_url)
     return response 
 
 def get_articles_2(topic, begin_date, end_date):
+    '''
+    This function retrieves articles from the NYT within a specifc timeframe by issuing a get request
+    '''
     request_url = f'https://api.nytimes.com/svc/search/v2/articlesearch.json?q={topic}&facet=true&begin_date={begin_date}&end_date={end_date}&api-key={API_KEY}'
     response = requests.get(request_url)
     return response 
 
 def process_request(response):
-    parsed_response = json.loads(response.text)
+    try:
+        parsed_response = json.loads(response.text)
+    except:
+        parsed_response = json.loads(response)
     all_articles = parsed_response["response"]["docs"]
     hits = (parsed_response["response"]["meta"]["hits"])
     print(f"Your search returned {hits} hits on the New York Times")
     return(hits, all_articles)
 
 def date_validation(date, months):
+    '''
+    This function validates the dates entered by the user - extremely improtant to ensure the url is valid and the get request is successful
+    It first check whether all values in the date are numeric
+    It then checks if the date is eight digits long
+    It then makes sure the date entered is before the current date
+    It then ensures the date entered is valid so a user can't input the 31st of APril because this date doens't exist
+    It also accounts for leap years by calcualting whether or not hte entered year is a leap year
+     
+    '''
     correct = False 
     year = date[0:4]
     month = date[4:6]

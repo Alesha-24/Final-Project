@@ -114,3 +114,13 @@ In order to run this file copy and past the following into the command line.
 python app/all_news.py
 
 ```
+## Testing
+
+The software also has built in testing, which is also run remotely on the Travis CI server when the repository is updated. 
+In order to run the tests on your local computer ensure that you have first activated a virtual environment and installed the "requirements.txt" file as mentioned above because this contains the pytest package. 
+
+Then from the command line simply run the code below:
+
+``` sh 
+pytest
+```

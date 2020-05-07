@@ -10,12 +10,20 @@ load_dotenv()
 API_KEY = os.environ.get("NEWS_API")
 
 def get_sources():
+    '''
+    This function retrieves all available sources using the NewsAPI key by issuing a get request
+    It then uses json to process this data into a useable format
+    '''
     sources_url = (f"https://newsapi.org/v2/sources?apiKey={API_KEY}")
     response = requests.get(sources_url)
     sources = json.loads(response.text)
     return sources
 
 def get_articles(url_sources):
+    '''
+    This function retrieves news from the selected sources using the NewsAPI key by issuing a get request
+    It then uses json to process this data into a useable format
+    '''
     url = f"http://newsapi.org/v2/everything?sources={url_sources}&language=en&pagesize=5&apiKey={API_KEY}"
     response = requests.get(url)
     news = json.loads(response.text)
@@ -30,7 +38,13 @@ def aggregate_articles(articles):
                 ,"Article URL: ": x["url"]}
         article_list.append(article)
     return(article_list)
-      
+
+def sources(all_sources):
+    list_of_sources = []
+    for x in all_sources:
+        print(x["id"])
+        list_of_sources.append(x["id"])
+    return list_of_sources
 
 def get_filtered_articles(url_sources,topic):
     #searches for the user's topic in the title of the article only 
@@ -48,10 +62,7 @@ def get_news():
     print("Type in the name of each source one at a time and ensure to include the hyphen(-) in the name.")
     print("---------------------------")
     all_sources = sources["sources"]
-    list_of_sources = []
-    for x in all_sources:
-        print(x["id"])
-        list_of_sources.append(x["id"])
+    list_of_sources = sources(all_sources)
     source_choice = ""
     source_choices = []
     while source_choice != "DONE":
@@ -93,3 +104,5 @@ def get_news():
     return source_choices, all_articles, topic, filtered_articles
      
 
+if __name__ == "__main__":
+    get_news()
